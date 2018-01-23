@@ -136,9 +136,9 @@ int main(int argc, const char *argv[]){
         //show resualt
 	double total = ((double)(clock() - time))/CLOCKS_PER_SEC;
 	if(count != 0)
-		printf("find all solution，using time %.10lf second\n",total);
+		printf("find all solutions, using time %.10lf second\n",total);
 	else
-		printf("not find solution，using time %.10lf second\n",total);
+		printf("not find solution, using time %.10lf second\n",total);
         printf("any key to exit\n");
 	getchar();
 }

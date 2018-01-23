@@ -31,9 +31,9 @@ int try_put_in_box(const int S[9][9], s_node * node, int t){
 }
 
 int try_put(const int S[9][9], s_node * node, int k){
-	if(-1 == try_put_in_row(S, node, k))     return -1;//if(-1) 的值为真
-	if(-1 == try_put_in_column(S, node, k)) return -1;
-	if(-1 == try_put_in_box(S, node, k))     return -1;
+	if(-1 == try_put_in_row(S, node, k))	return -1;//if(-1) 的值为真
+	if(-1 == try_put_in_column(S, node, k))	return -1;
+	if(-1 == try_put_in_box(S, node, k))	return -1;
 	return 1;
 }
 
@@ -83,6 +83,18 @@ s_node * init_cule(const int S[9][9]){
 	corrent = NULL;
 	return begain;
 }
+
+void free_node(s_node * corrent){
+	s_node * nest;
+	
+	while(corrent){
+		nest = corrent->nest;
+		free(corrent);
+		corrent = nest;
+	}
+}
+	
+	
 void show_solution(const int S[9][9]){
     printf("solution : %d\n",count);
 	for(int i = 0; i < 9; i++){
@@ -96,6 +108,7 @@ void show_solution(const int S[9][9]){
 
 
 void Stupid_find_all(int S[9][9], s_node * node){
+	if(node == NULL) return;
 	for(int i = 0; i < 9; i++){
 		if(node -> cule[i] == 0) continue;
 		if(1 == try_put(S, node, i+1)){
@@ -116,7 +129,7 @@ int main(int argc, const char *argv[]){
 	clock_t time = clock();
 	if(argc != 2)return -1;
 
-        //open the file
+    //open the file
 	FILE *fp = fopen(argv[1],"r");
 	if(fp == NULL){
 		printf("can't find this file : %s\n",argv[1]);
@@ -130,16 +143,19 @@ int main(int argc, const char *argv[]){
 		fclose(fp);
 		return -1;
 	}
-        //find all the solution
-	Stupid_find_all(S, init_cule(S));
+	
+	//find all the solution
+	s_node * begin = init_cule(S);
+	Stupid_find_all(S, begin);
+	free_node(begin);
         
-        //show resualt
+	//show resualt
 	double total = ((double)(clock() - time))/CLOCKS_PER_SEC;
 	if(count != 0)
 		printf("find all solutions, using time %.10lf second\n",total);
 	else
 		printf("not find solution, using time %.10lf second\n",total);
-        printf("any key to exit\n");
+	printf("any key to exit\n");
 	getchar();
 }
 
